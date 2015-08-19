@@ -20,3 +20,4 @@ Directions:
 
 1. Create the database using: `bundle exec rake db:create db:migrate`
 2. Get all users and stats: `curl -H "Content-Type: application/json" -X GET http://localhost:3000/api/users`
+3. Create a new user using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"user": {"username":"sample_username"}}' http://localhost:3000/api/users`

@@ -1,12 +1,19 @@
 module Api
   class GamesController < ApiController
-    before_action :check_play_token
+    # before_action :check_play_token
+
+    def index
+      @games = Game.all
+    end
 
     def create
-      @game = Game.new(params[:title].downcase)
+      @game = Game.new(title: params[:title].downcase, game_length: params[:game_length])
       if @game.save
         message = {status: 200, message: "#{@game.title.capitalize} was successfully saved!"}
-        return json: message
+        render json: message
+      else
+        render json: @game.errors.full_messages, status: :unprocessable_entity
+      end
     end
 
     def start_game
@@ -23,10 +30,9 @@ module Api
       end
 
       @expire_at = Time.now + @game.game_length.minutes
-      @play_token = PlayToken.create(token: create_game_token(@user.username, @game.id),
-                                     user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
+      @play_token = PlayToken.create(token: create_game_token(@user.username, @game.id), user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
 
-      message = {status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play until #{@play_token.expire_at}."
+      message = {status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play until #{@play_token.expire_at}."}
       render json: message
     end
 
@@ -41,7 +47,7 @@ module Api
 
     private
       def game_params
-        params.require(:game).permit(:title)
+        params.require(:game).permit(:title, :game_length)
       end
   end
 end

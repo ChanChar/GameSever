@@ -6,4 +6,16 @@ class Game < ActiveRecord::Base
     "#{username}-#{game_id}-#{PlayToken.generate_token_suffix}"
   end
 
+  def player_wins
+    play_tokens.where(won: true).length
+  end
+
+  def player_losses
+    play_tokens.where(won: false).length
+  end
+
+  def total_plays
+    play_tokens.length
+  end
+
 end
