@@ -25,12 +25,13 @@ ActiveRecord::Schema.define(version: 20150819181053) do
   add_index "games", ["title"], name: "index_games_on_title", unique: true, using: :btree
 
   create_table "play_tokens", force: :cascade do |t|
-    t.string   "token",      null: false
-    t.integer  "user_id",    null: false
-    t.integer  "game_id",    null: false
-    t.datetime "expire_at",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "token",                      null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "game_id",                    null: false
+    t.boolean  "won",        default: false, null: false
+    t.datetime "expire_at",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "play_tokens", ["game_id"], name: "index_play_tokens_on_game_id", using: :btree

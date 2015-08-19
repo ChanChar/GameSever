@@ -4,6 +4,7 @@ class CreatePlayTokens < ActiveRecord::Migration
       t.string :token, null: false
       t.integer :user_id, null: false
       t.integer :game_id, null: false
+      t.boolean :won, default: false, null: false
       t.datetime :expire_at, null: false
 
       t.timestamps null: false

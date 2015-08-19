@@ -1,4 +1,4 @@
-module ApiController
+module Api
   class GamesController < ApiController
     before_action :check_play_token
 

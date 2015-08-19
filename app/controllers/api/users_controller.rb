@@ -1,5 +1,9 @@
-module ApiController
+module Api
   class UsersController < ApiController
+
+    def index
+      @users = User.includes(:play_tokens).all
+    end
 
     def create
       @user = User.new(user_params)

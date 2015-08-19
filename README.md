@@ -20,4 +20,4 @@ Rough Draft of User Interface:
 Directions:
 
 1. Create the database using: `bundle exec rake db:create db:migrate`
-2. 
+2. Get all users and stats: `curl -H "Content-Type: application/json" -X GET http://localhost:3000/api/users`

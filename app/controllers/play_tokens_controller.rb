@@ -1,2 +1,4 @@
-class PlayTokensController < ApplicationController
+module Api
+  class PlayTokensController < ApiController
+  end
 end
