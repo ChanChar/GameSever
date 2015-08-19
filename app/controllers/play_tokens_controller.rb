@@ -1,0 +1,2 @@
+class PlayTokensController < ApplicationController
+end
