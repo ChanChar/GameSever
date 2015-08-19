@@ -1,13 +1,16 @@
 module Api
   class GamesController < ApiController
-    # before_action :check_play_token
 
     def index
       @games = Game.all
     end
 
     def create
-      @game = Game.new(title: params[:title].downcase, game_length: params[:game_length])
+      # Originally decided to have token duration determined by game type.
+      # @game = Game.new(title: params[:title].downcase, game_length: params[:game_length])
+
+      @game = Game.new(title: params[:title].downcase)
+
       if @game.save
         message = {status: 200, message: "#{@game.title.capitalize} was successfully saved!"}
         render json: message
@@ -19,7 +22,7 @@ module Api
     # Game interface
 
     def play_turn
-      @token = params[:token]
+      @token = PlayToken.where("token: ?", params[:token])
 
       if PlayToken.valid_token?(@token)
         @player, @game = @token.split('-').slice(0, 1)

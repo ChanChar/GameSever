@@ -1,5 +1,6 @@
 class PlayToken < ActiveRecord::Base
   validates :token, :user_id, :game_id, presence: true
+  has_many :turns
   belongs_to :user
   belongs_to :game
 
@@ -8,7 +9,6 @@ class PlayToken < ActiveRecord::Base
   end
 
   def valid_token?(token)
-    check_token = PlayToken.where("token: ?", token)
-    !(check_token.nil? || check_token.won || check_token.expire_at > Time.now)
+    !(token.nil? || token.won || token.expire_at > Time.now)
   end
 end
