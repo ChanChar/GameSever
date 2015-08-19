@@ -6,4 +6,9 @@ class PlayToken < ActiveRecord::Base
   def generate_token_suffix
     SecureRandom.urlsafe_base64
   end
+
+  def valid_token?(token)
+    check_token = PlayToken.where("token: ?", token)
+    !(check_token.nil? || check_token.won || check_token.expire_at > Time.now)
+  end
 end
