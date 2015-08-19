@@ -1,10 +1,11 @@
+Concerns:
+
+1. Are game token timeouts determined by users or by the games themselves.
+
 TODO:
 
-1. Add indexes to games titles
-2. Add uniqueness constraint to users
-
-2. Multiple play tokens for continuous play on multiple games at a time.
-
+Design Notes:
+ - Multiple play tokens for continuous play on multiple games at a time.
 
 Rough Draft of User Interface:
 
@@ -14,8 +15,6 @@ Rough Draft of User Interface:
 
 2. Browse through all Games by requesting games library at: "/api/games/"
 3. Browse through all players and their stats by requesting users' index at: "/api/users"
-
-
 
 Directions:
 

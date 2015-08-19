@@ -9,7 +9,7 @@ module Api
         return json: message
     end
 
-    def create_token
+    def start_game
       @user = User.find_by_username(params[:username])
       @game = Game.find_by_title(params[:title].downcase)
 
@@ -21,6 +21,17 @@ module Api
         message = {status: 404, message: "#{params[:title].capitalize} was not found!"}
         render json: message
       end
+
+      @expire_at = Time.now + @game.game_length.minutes
+      @play_token = PlayToken.create(token: create_game_token(@user.username, @game.id),
+                                     user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
+
+      message = {status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play until #{@play_token.expire_at}."
+      render json: message
+    end
+
+    def play_turn
+      # TODO
     end
 
     protected
