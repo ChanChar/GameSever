@@ -11,16 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819181053) do
+ActiveRecord::Schema.define(version: 20150819211948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
     t.string   "title"
-    t.integer  "game_length"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "games", ["title"], name: "index_games_on_title", unique: true, using: :btree
@@ -30,6 +29,7 @@ ActiveRecord::Schema.define(version: 20150819181053) do
     t.integer  "user_id",                    null: false
     t.integer  "game_id",                    null: false
     t.boolean  "won",        default: false, null: false
+    t.boolean  "complete",   default: false, null: false
     t.datetime "expire_at",                  null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -37,6 +37,15 @@ ActiveRecord::Schema.define(version: 20150819181053) do
 
   add_index "play_tokens", ["game_id"], name: "index_play_tokens_on_game_id", using: :btree
   add_index "play_tokens", ["user_id"], name: "index_play_tokens_on_user_id", using: :btree
+
+  create_table "turns", force: :cascade do |t|
+    t.integer  "play_token_id", null: false
+    t.string   "directions",    null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "turns", ["play_token_id"], name: "index_turns_on_play_token_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",   null: false

@@ -9,7 +9,8 @@ module Api
       # Originally decided to have token duration determined by game type.
       # @game = Game.new(title: params[:title].downcase, game_length: params[:game_length])
 
-      @game = Game.new(title: params[:title].downcase)
+      @game = Game.new(game_params)
+      @game.title = @game.title.downcase
 
       if @game.save
         message = {status: 200, message: "#{@game.title.capitalize} was successfully saved!"}
@@ -22,13 +23,14 @@ module Api
     # Game interface
 
     def play_turn
-      @token = PlayToken.where("token: ?", params[:token])
+      @token = PlayToken.find_by_token(params[:token])
 
-      if PlayToken.valid_token?(@token)
-        @player, @game = @token.split('-').slice(0, 1)
+      if @token.valid_token?
+        @player, @game_id = @token.token.split('-').slice(0, 2)
         @current_turn = Turn.create(play_token_id: @token.id, directions: params[:directions])
 
-        current_game = @game.constantize.new
+        @game = Game.find(@game_id).title
+        current_game = @game.classify.constantize.new
         @token.turns.each do |turn|
           current_game.play_turn(turn.directions)
         end
@@ -53,7 +55,7 @@ module Api
 
     private
       def game_params
-        params.require(:game).permit(:title, :game_length)
+        params.require(:game).permit(:title)
       end
   end
 end

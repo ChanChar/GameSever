@@ -1,3 +1,7 @@
+require 'action_view'
+require 'action_view/helpers'
+include ActionView::Helpers::DateHelper
+
 module Api
   class PlayTokensController < ApiController
 
@@ -20,9 +24,13 @@ module Api
       # @expire_at = Time.now + @game.game_length.minutes
 
       @expire_at = Time.now + @token_duration.minutes
-      @play_token = PlayToken.create(token: create_game_token(@user.username, @game.id), user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
+      @play_token = PlayToken.create(
+        token: PlayToken.create_game_token(@user.username, @game.id), user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
 
-      message = {status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play until #{@play_token.expire_at}."}
+      message = {
+        status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play for #{time_ago_in_words(@play_token.expire_at)}. You can play using the following url: #{api_play_game_url(@play_token.token)}"
+      }
+
       render json: message
     end
   end

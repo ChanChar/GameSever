@@ -3,6 +3,7 @@ TODO:
 Design Notes:
  - Tokens contain the username & the game to dynamically search for and play an instance of a game.
  - When requesting a play token, if a given username wasn't created prior, a new user will be created.
+ - Games are pluggable and customizable based on text directions. I've included a Hangman game as an example.
 
 Routes / API Endpoints
 
@@ -23,12 +24,21 @@ Directions:
 
 3. Create a new user using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"user": {"username":"sample_username"}}' http://localhost:3000/api/users`
 
-4. Create a new game using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"game": {"title":"game_name"}}' http://localhost:3000/api/games`
+4. Create a new game using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"game":{"title":"game_name"}}' http://localhost:3000/api/games`
 
-5. Get a game play token using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"username":"username", "title": "game_title"}' http://localhost:3000/api/new_games`
+5. Get a game play token using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"username":"username", "title": "game_title", "duration": 60}' http://localhost:3000/api/new_game`
 
-6. Play the game using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"username":"username", "title": "game_title"}' http://localhost:3000/api/:play_token`
+
+curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"username":"sample_username", "title": "hangman", "duration": 60}' http://localhost:3000/api/new_game
+
+
+curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"username":"sample_username", "title": "hangman", "duration":15}' http://localhost:3000/api/new_game
+
+6. Play the game using: `curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"directions": "guess x"}' http://localhost:3000/api/:play_token`
+
+curl -v -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d ' {"directions": "guess x"}' http://localhost:3000/api/play/sample_username-1-reedyVwW79bV5xyZjRWZCA
 
 Concerns:
 
 1. Are game token timeouts determined by users or by the games themselves.
+2. If usernames have a dash in the name, splits on incorrect params. (Solution: only allow letters/numbers)
