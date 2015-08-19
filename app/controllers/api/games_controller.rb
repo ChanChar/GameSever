@@ -26,7 +26,24 @@ module Api
 
       if PlayToken.valid_token?(@token)
         @player, @game = @token.split('-').slice(0, 1)
-        message = { status: 200, message: @game.play_turn(params[:player_action]) }
+        @current_turn = Turn.create(play_token_id: @token.id, directions: params[:directions])
+
+        current_game = @game.constantize.new
+        @token.turns.each do |turn|
+          current_game.play_turn(turn.directions)
+        end
+
+        if current_game.won?
+          @token.won = true
+          @token.complete = true
+          message = { status: 200, message: "YOU WON!" }
+        elsif current_game.lost?
+          @token.complete = true
+          message = { status: 200, message: "YOU LOST..." }
+        else
+          message = { status: 200, message: current_game.current_state }
+        end
+
         render json: message
       else
         message = { status: 403, message: "That token is invalid!" }
