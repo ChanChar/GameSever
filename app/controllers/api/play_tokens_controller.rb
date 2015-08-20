@@ -24,13 +24,16 @@ module Api
       # @expire_at = Time.now + @game.game_length.minutes
 
       @expire_at = Time.now + @token_duration.minutes
-      @play_token = PlayToken.create(
-        token: PlayToken.create_game_token(@user.username, @game.id), user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
+      @token = PlayToken.create_game_token(@user.username, @game.id)
+      @play_token = PlayToken.new(token: @token, user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
 
-      message = {
-        status: 200, message: "Hey, #{@user.username}, #{@game.title} is ready to go! You will be able to play for #{time_ago_in_words(@play_token.expire_at)}. You can play using the following url: #{api_play_game_url(@play_token.token)}"
-      }
-
+      if @play_token.save
+        message = {
+          status: 200, message: "Hey, #{@user.username}, #{@game.title.capitalize} is ready to go! You will be able to play for #{time_ago_in_words(@play_token.expire_at)}. You can play using the following url: #{api_play_game_url(@play_token.token)}"
+        }
+      else
+        message = { status: 403, message: "Something is wrong with the token generator. Contact me at charleschanlee@gmail.com." }
+      end
       render json: message
     end
   end

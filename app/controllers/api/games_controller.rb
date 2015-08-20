@@ -25,22 +25,26 @@ module Api
     def play_turn
       @token = PlayToken.find_by_token(params[:token])
 
-      if @token.valid_token?
+      if @token && @token.valid_token?
         @player, @game_id = @token.token.split('-').slice(0, 2)
         @current_turn = Turn.create(play_token_id: @token.id, directions: params[:directions])
 
         @game = Game.find(@game_id).title
-        current_game = @game.classify.constantize.new
+        current_game = @game.classify.constantize.new(@token.value)
+
+        if @token.value.nil?
+          @token.update(value: current_game.mystery_word)
+        end
+
         @token.turns.each do |turn|
           current_game.play_turn(turn.directions)
         end
 
         if current_game.won?
-          @token.won = true
-          @token.complete = true
+          @token.mark_complete(true)
           message = { status: 200, message: "YOU WON!" }
         elsif current_game.lost?
-          @token.complete = true
+          @token.mark_complete
           message = { status: 200, message: "YOU LOST..." }
         else
           message = { status: 200, message: current_game.current_state }

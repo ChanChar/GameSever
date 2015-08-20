@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20150819211948) do
     t.integer  "game_id",                    null: false
     t.boolean  "won",        default: false, null: false
     t.boolean  "complete",   default: false, null: false
+    t.string   "value"
     t.datetime "expire_at",                  null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
