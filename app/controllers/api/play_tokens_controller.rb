@@ -12,6 +12,8 @@ module Api
 
       if @user.nil?
         @user = User.create(username: params[:username])
+      else
+        @user.invalidate_last_token
       end
 
       if @game.nil?
@@ -20,10 +22,7 @@ module Api
         return
       end
 
-      # Originally had the game set the token expiration time
-      # @expire_at = Time.now + @game.game_length.minutes
-
-      @expire_at = Time.now + @token_duration.minutes
+      @expire_at = Time.now + @token_duration.hours
       @token = PlayToken.create_game_token(@user.username, @game.id)
       @play_token = PlayToken.new(token: @token, user_id: @user.id, game_id: @game.id, expire_at: @expire_at)
 

@@ -6,8 +6,6 @@ module Api
     end
 
     def create
-      # Originally decided to have token duration determined by game type.
-      # @game = Game.new(title: params[:title].downcase, game_length: params[:game_length])
 
       @game = Game.new(game_params)
       @game.title = @game.title.downcase
