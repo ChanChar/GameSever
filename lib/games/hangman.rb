@@ -36,7 +36,7 @@ class Hangman
       if @guessed_letters.include?(letter)
         @display << letter
       else
-        @display << "___"
+        @display << "_"
       end
     end
 

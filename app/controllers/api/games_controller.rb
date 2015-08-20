@@ -12,10 +12,11 @@ module Api
 
       if @game.save
         message = {status: 200, message: "#{@game.title.capitalize} was successfully saved!"}
-        render json: message
       else
-        render json: @game.errors.full_messages, status: :unprocessable_entity
+        message = { status: :unprocessable_entity, message: @game.errors.full_messages }
       end
+
+      render json: message
     end
 
     # Game interface
