@@ -1,3 +1,12 @@
+TODO:
+
+1. Remove unused dirs/files.
+2. Add better directions for plugging in games, and possible a sample game with just formatting.
+3. Add a quick web UI for getting play tokens using username and game
+4. Check for existing games.
+5. Need improved error handling for the different processes in the project.
+
+
 Notes:
  - Tokens contain the username & the game to dynamically search for and play an instance of a game.
  - When requesting a play token, if a given username wasn't created prior, a new user will be created.
