@@ -2,7 +2,7 @@ require 'set'
 class Hangman
   attr_reader :mystery_word, :display, :number_of_guesses
 
-  def initialize(word)
+  def initialize(word=None)
     @mystery_word = word || get_random_word
     @guessed_letters = Set.new
     @display = []
